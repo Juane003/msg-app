@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="style_refact.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300&display=swap" rel="stylesheet"> 
+    <title>MyChatApp</title>
+    <link rel="icon" type="image/x-icon" href="src/charla.png">
+</head>
+<body>
+    <header>
+        <img src ="src/charla.png" id="logo">
+        <h2><a href ="index.html">MyChatApp</a></h2>
+    </header>
+    <div id="main-container">
+        <div class="chat" id="chat-list">
+            <h2 id="contact-header">Contacts</h2>
+            <div id="btn-top">
+                <button id="add-btn">
+                    <img src="src/add.png" class="add-img" id="plus-img">
+                </button>
+            </div> 
+            <div class="chat scroll" id="tb-container">
+                <div class="tb-columns">
+                    <button class="contact-btn" id="contact-btn">
+                        <img src="src/perfil.png" class="pfp">
+                        <span class="contact-style">Wachoo</span>
+                    </button>
+                </div>
+                <div class="tb-columns">
+                    <button class="contact-btn">
+                        <img src="src/perfil.png" class="pfp">
+                        <span class="contact-style">nazi</span>
+                    </button>
+                </div>
+            </div>
+        </div>
+        <div id="add-friends">
+            <div id="add-input">
+                <h1>Add a friend!</h1>
+                <button id="close-btn"></button>
+                <input type="text" placeholder="Contact Name" class="form-input">
+                <input type="text" placeholder="Phone Number"class="form-input">
+                <button id="add-confirmation">Add!</button>
+            </div>
+        </div>
+        <div class="chat" id="chat-textbox">
+            <h2>Contact Name</h2>
+            <div id="textbox">
+                <div class="scroll chatbox-text"id="chatbox" >
+                    <div class="msg-row">
+                        <span class="msg-sent"></span>
+                    </div>
+                    <div class="msg-row">
+                        <span class="msg-recieved"></span>
+                    </div>
+                </div>
+               <div id="blue-block">
+                    <input id="chat" type="text">
+                    <div id="btn-wrapper">
+                        <button class="attach-btn" id="emoji-btn"></button>
+                        <button class="attach-btn" id="archive-btn"></button>
+                        <button class="attach-btn" id="pic-btn"></button>
+                    </div>  
+                </div>
+            </div>
+        </div>
+    </div>
+    <script type="text/javascript" src="index.js" defer></script>
+</body>
+</html>
