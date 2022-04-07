@@ -1,200 +1,155 @@
-@keyframes imgRotation{
-    0% {transform: rotate(0deg);}
-    25% {transform: rotate(90deg);}
-    50% {transform: rotate(180deg);}
-    75% {transform: rotate(270deg);}
-    100% {transform: rotate(360deg);}
+const $ = (element) => document.getElementById(element);
+
+const chatbox = $('chatbox');
+const inputMsg = $('blue-block');
+const table = $('tb-wrapper');
+const addBtn = $('add-btn');
+const addForm = $('add-friends');
+const closeBtn = $('close-btn');
+const addConfirmation = $('add-confirmation');
+const contactName = $('contact-name');
+const contactInput = $('new-contact-name');
+
+let btnArr = [];
+let contactList = [];
+let buttonContactList = [];
+let storagedBtns = localStorage.getItem('contacts');
+buttonContactList = JSON.parse(storagedBtns || '[]');
+
+const mainContainer = document.getElementsByClassName('tb-columns');
+const lastElement = mainContainer[mainContainer.length - 1];
+
+if(buttonContactList){
+    lastElement.innerHTML = buttonContactList.join('');
 }
 
-body{
-    font-family: 'Roboto', sans-serif;
-    background-color: #050A30;
-    margin: 0;
+// DECLARED VARIABLES HERE BECAUSE localStorage ALREADY LOADED;
+const contactClass = document.querySelectorAll('.contact-btn');
+const contactSpan = document.querySelectorAll('.contact-style');
+
+//SAVED BUTTONS EVENTS
+contactClass.forEach(e => {
+    e.addEventListener('click', () =>{
+        chatbox.style.visibility = 'visible';
+        inputMsg.style.visibility = 'visible';
+    })
+});
+
+contactClass.forEach(e =>{
+    e.addEventListener('click', () => {
+        addForm.style.display = 'none';
+    })
+})
+
+contactClass.forEach((e, i) =>{
+    e.addEventListener('click', () => {
+        contactName.innerText = contactSpan[i].innerText;
+        });
+    })
+
+contactClass.forEach(button => {
+    button.addEventListener('click', () => {
+        contactClass.forEach(button => button.classList.remove('active'))
+        btnArr.forEach(button => button.classList.remove('active'));
+        button.classList.add('active');
+    });
+});
+
+//STATIC BUTTONS EVENTS
+addBtn.addEventListener('click', event =>{
+    addForm.style.display = 'flex';
+});
+
+closeBtn.addEventListener('click', event =>{
+    addForm.style.display = 'none';
+});
+
+addConfirmation.addEventListener('click', () =>{
+    if(validateInput(contactInput) === false){
+            addForm.style.display = 'flex';
+    }
+    else{
+        addForm.style.display = 'none';
+        saveName();
+    }
+});
+
+//NAME TO CONTACT NAME H2 TAG
+function saveName(){
+    let names = contactInput.value;
+    contactList.push(names);
+    createContact(names);
 }
 
-header{
-    display: flex;
-    background-color: #000C66;
-    justify-content: flex-start;
-    align-items: center; 
+function createContact(contact){
+    const mainContainer = document.getElementsByClassName('tb-columns');
+    const lastElement = mainContainer[mainContainer.length - 1];
+
+    const newButton = document.createElement('button');
+    const newImg = document.createElement('img');
+    const newSpan = document.createElement('span');
+    const newName = document.createTextNode(contact);
+
+    newButton.classList.add('contact-btn');
+    newImg.classList.add('pfp');
+    newSpan.classList.add('contact-style');
+
+    newButton.appendChild(newImg);
+    newButton.appendChild(newSpan);
+    newSpan.appendChild(newName);
+
+    lastElement.insertBefore(newButton, null);
+
+    const newImgSrc = document.getElementsByClassName('pfp');
+    const lastImg = newImgSrc[newImgSrc.length -1];
+    lastImg.src = 'src/padre.jpg';
+
+    btnArr.push(newButton);
+
+    buttonContactList.push(newButton.outerHTML);
+    localStorage.setItem('contacts', JSON.stringify(buttonContactList));
+
+    addEvents(newButton, btnArr, newSpan);
 }
 
-#logo{
-    height: 3rem;
-    width: 3rem;
-    margin-left: 0.25rem;
+//Events Listeners
+function addEvents(button, array, newContactName){
+    button.addEventListener('click', () =>{
+        addForm.style.display = 'none';
+    });
+
+    button.addEventListener('click', () =>{
+        chatbox.style.visibility = 'visible';
+        inputMsg.style.visibility = 'visible';
+    });
+    
+    button.addEventListener('click', () =>{
+        contactName.innerText = newContactName.innerText;
+    });
+
+    stayPressed(array, contactClass);
 }
 
-#logo:hover{
-    animation-name: imgRotation;
-    animation-duration: 2s;
-    animation-iteration-count: infinite;
+//Input Validation
+function validateInput(input){
+    const validationMsg = $('validation-msg');
+    let valid = true
+
+    if(!input.value){
+        validationMsg.style.visibility = 'visible';
+        valid = false;
+    }
+    return valid;
 }
 
-h2{
-    margin-left: 1%;
-}
-
-a{
-    color: #7EC8E3;  
-    text-decoration: none;
-}
-
-#main-container{
-    display: flex;
-    flex-direction: row;
-}
-
-.chat{
-    height: 30rem;
-    width: 70%;
-    background-color:#000C66;
-    margin: 1.5% 1.5% 0 1.5%;
-}
-
-#chat-list{
-    display: flex;
-    flex-direction: column;
-    align-items: flex-end;
-}
-
-.contact-header{
-    color:#7EC8E3;
-    align-self: flex-start;
-}
-
-#btn-top{
-    display: flex;
-    position: relative;
-    bottom: 14.25%;
-}
-
-#add-btn{
-    background-image: url(src/add.png);
-    background-position: center;
-    background-size: 1rem;
-    height: 1rem;
-    width: 1rem;
-    border:none;
-    background-color: transparent;
-    cursor: pointer;
-}
-#tb-container{
-    display: flex;
-    flex-direction: column;
-    width: 100%;
-    margin:0;
-}
-
-.contact-btn{
-    display: flex;
-    justify-content: flex-start;
-    align-items: center;
-
-    width: 100%;
-    height: 3rem;
-
-    border:none;
-    border-top: 0.2rem solid #050A30;
-
-    background-color: transparent;
-    cursor: pointer;
-}
-
-.contact-btn:hover{
-    background-color: lightblue;
-}
-.contact-btn:active, .active{
-    background-color: red;
-}
-
-.pfp{
-    height: 2rem;
-    width: 2rem;
-    border-radius: 50%;
-}
-
-.contact-style{
-    color: #7EC8E3;
-    margin-left: 0.25rem;
-    font-size: large;
-}
-
-#textbox{
-    display: flex;
-    flex-direction: column;
-} 
-#chatbox{
-    visibility: hidden;
-    display: flex;
-    height: 20rem;
-    width: 50%;
-    margin-left: 25%;
-    background-color: white;
-}
-
-#chat{
-    width: 70%;
-    margin-top: 3.5rem;
-    margin-left: 1rem;
-    margin: 1px solid red;
-}
-
-#blue-block{
-    visibility: hidden;
-    display: flex;
-    flex-direction: column;
-    width: 100%;
-    height: 100%;
-}
-#btn-wrapper{
-    display: flex;
-    justify-content: flex-end;
-    position: relative;
-    bottom: 1.3rem;
-    margin-right: 6%;
-}
-
-.attach-btn{
-    height: 1.25rem;
-    width: 5%;
-}
-
-#add-friends{
-    display:none;
-    flex-direction: row;
-    width: 20%;
-    position: absolute;
-    margin-left: auto;
-    margin-right: auto;
-    left: 0;
-    right: 0;
-    text-align: center;
-    background-color: #7EC8E3;
-    opacity: 0.9;
-}
-
-#add-confirmation{
-    border:none;
-    height: 1rem;
-    width: 3rem;
-}
-#validation-msg{
-    visibility: hidden;
-}
-
-#close-btn{
-    background-image: url(src/close.jpg);
-    background-position: center;
-    background-size: 1rem;
-    height: 1rem;
-    width: 1rem;
-    border:none;
-    background-color: transparent;
-    position: relative;
-    cursor: pointer;
-    bottom: 4.5%;
-}
-.scroll{
-    overflow-y: auto;
+//EVENTS FUNCTIONS
+    
+function stayPressed(buttons, oldBtns){
+    buttons.forEach(button => {
+        button.addEventListener('click', () => {
+            buttons.forEach(button => button.classList.remove('active'));
+            oldBtns.forEach(button => button.classList.remove('active'))
+            button.classList.add('active');
+            });
+      });
 }
