@@ -109,25 +109,27 @@ function createContact(contact){
     buttonContactList.push(newButton.outerHTML);
     localStorage.setItem('contacts', JSON.stringify(buttonContactList));
 
-    addEvents(newButton, btnArr, newSpan);
-}
-
-//Events Listeners
-function addEvents(button, array, newContactName){
-    button.addEventListener('click', () =>{
+    //Created Button Events
+    newButton.addEventListener('click', () =>{
         addForm.style.display = 'none';
     });
 
-    button.addEventListener('click', () =>{
+    newButton.addEventListener('click', () =>{
         chatbox.style.visibility = 'visible';
         inputMsg.style.visibility = 'visible';
     });
     
-    button.addEventListener('click', () =>{
-        contactName.innerText = newContactName.innerText;
+    newButton.addEventListener('click', () =>{
+        contactName.innerText = newSpan.innerText;
     });
 
-    stayPressed(array, contactClass);
+    btnArr.forEach(button => {
+        button.addEventListener('click', () => {
+            btnArr.forEach(button => button.classList.remove('active'));
+            contactClass.forEach(button => button.classList.remove('active'))
+            button.classList.add('active');
+            });
+      });
 }
 
 //Input Validation
@@ -140,16 +142,4 @@ function validateInput(input){
         valid = false;
     }
     return valid;
-}
-
-//EVENTS FUNCTIONS
-    
-function stayPressed(buttons, oldBtns){
-    buttons.forEach(button => {
-        button.addEventListener('click', () => {
-            buttons.forEach(button => button.classList.remove('active'));
-            oldBtns.forEach(button => button.classList.remove('active'))
-            button.classList.add('active');
-            });
-      });
-}
+}   
