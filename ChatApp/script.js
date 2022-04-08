@@ -10,11 +10,13 @@ const addConfirmation = $('add-confirmation');
 const contactName = $('contact-name');
 const contactInput = $('new-contact-name');
 
-let btnArr = [];
-let contactList = [];
-let buttonContactList = [];
-let storagedBtns = localStorage.getItem('contacts');
+const btnArr = [];
+const contactList = [];
+let buttonContactList = [];    
+const storagedBtns = localStorage.getItem('contacts');
 buttonContactList = JSON.parse(storagedBtns || '[]');
+
+const newArr = []
 
 const mainContainer = document.getElementsByClassName('tb-columns');
 const lastElement = mainContainer[mainContainer.length - 1];
@@ -26,6 +28,9 @@ if(buttonContactList){
 // DECLARED VARIABLES HERE BECAUSE localStorage ALREADY LOADED;
 const contactClass = document.querySelectorAll('.contact-btn');
 const contactSpan = document.querySelectorAll('.contact-style');
+
+let oldNames = []
+contactSpan.forEach(e =>{oldNames.push(e.innerText)})
 
 //SAVED BUTTONS EVENTS
 contactClass.forEach(e => {
@@ -65,7 +70,7 @@ closeBtn.addEventListener('click', event =>{
 });
 
 addConfirmation.addEventListener('click', () =>{
-    if(validateInput(contactInput) === false){
+    if(validateInput(contactInput, oldNames) === false){
             addForm.style.display = 'flex';
     }
     else{
@@ -82,9 +87,6 @@ function saveName(){
 }
 
 function createContact(contact){
-    const mainContainer = document.getElementsByClassName('tb-columns');
-    const lastElement = mainContainer[mainContainer.length - 1];
-
     const newButton = document.createElement('button');
     const newImg = document.createElement('img');
     const newSpan = document.createElement('span');
@@ -133,13 +135,24 @@ function createContact(contact){
 }
 
 //Input Validation
-function validateInput(input){
+function validateInput(input, oldContactArray){
     const validationMsg = $('validation-msg');
-    let valid = true
+    let valid = true;
+    let newExist = newArr.includes(input.value);
+    let exist = oldContactArray.includes(input.value)
 
     if(!input.value){
         validationMsg.style.visibility = 'visible';
         valid = false;
+    }else if(exist || newExist){
+        validationMsg.innerText = "Already Exists"
+        validationMsg.style.visibility = 'visible';
+        valid = false;
     }
-    return valid;
-}   
+
+    if(!newExist){
+        newArr.push(input.value);
+    }
+
+    return valid
+}
